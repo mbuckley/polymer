@@ -12,32 +12,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/html-canvas-image/html-canvas-image.html">
+<link rel="import" href="./meme-cards.html">
 
 <dom-module id="meme-generator">
   <link rel="import" type="css" href="meme-generator.css">
   <template>
 
+    <iron-ajax auto url="https://api.imgflip.com/get_memes" handle-as="json" last-response="{{memesDataResponse}}"></iron-ajax>
     <div class="container flex-horizontal">
       <div class="flexchild"></div>
-
-      <iron-ajax auto url="https://api.imgflip.com/get_memes" handle-as="json" last-response="{{memesDataResponse}}"></iron-ajax>
-      <iron-pages id="memePages" selected="{{selectedMemeIndex}}">
-
-        <template is="dom-repeat" items="[[memesDataResponse.data.memes]]">
-          <iron-swipeable-container swipe-style="curve">
-            <paper-card class="meme-card">
-              <!-- FIXME: iron-image does not seem to work well with html2canvas -->
-              <!-- <iron-image style="height: 300px; width: 300px; background-color: lightgray;"
-                          sizing="cover" preload fade src="[[item.url]]"></iron-image> -->
-              <img src="[[item.url]]" style="height: 300px; width: 300px; background-color: lightgray;" />
-              <p class="meme-header meme-text">{{header}}</p>
-              <p class="meme-footer meme-text">{{footer}}</p>
-            </paper-card>
-          </iron-swipeable-container>
-        </template>
-
-      </iron-pages>
-
+      <meme-cards id="meme-cards"
+                  items="[[memesDataResponse.data.memes]]"
+                  selected-meme-index="{{selectedMemeIndex}}"
+                  header-line="{{header}}"
+                  footer-line="{{footer}}"></meme-cards>
       <div class="flexchild"></div>
     </div>
 
